@@ -109,7 +109,7 @@ The flood-fill algorithm works as follows:
 See `tutorials/floodField/` for a complete example case featuring:
 - A 10×10×10 m domain
 - Water level at z = 5 m
-- A boat hull (2D shell without top face)
+- A boat hull without top face
 
 ## License
 
