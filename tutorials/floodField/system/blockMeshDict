@@ -1,0 +1,129 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2011-2024 OpenFOAM Foundation
+     \\/     M anipulation  |
+-------------------------------------------------------------------------------
+License
+    This file is part of OpenFOAM.
+
+    OpenFOAM is free software: you can redistribute it and/or modify it
+    under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    OpenFOAM is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+    for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
+
+Title
+    blockMeshDict for floodField tutorial
+
+Description
+    Creates a 10x10x10 m domain with a boat hull defined by STL.
+    Water level at z = 5 m.
+
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+
+scale 1;
+
+vertices
+(
+    // Bottom corners (z = 0)
+    (0 0 0)
+    (10 0 0)
+    (10 10 0)
+    (0 10 0)
+
+    // Top corners (z = 10)
+    (0 0 10)
+    (10 0 10)
+    (10 10 10)
+    (0 10 10)
+);
+
+blocks
+(
+    hex (0 1 2 3 4 5 6 7) (50 50 50) simpleGrading (1 1 1)
+);
+
+edges
+(
+);
+
+boundary
+(
+    left
+    {
+        type wall;
+        faces
+        (
+            (0 4 7 3)
+        );
+    }
+
+    right
+    {
+        type wall;
+        faces
+        (
+            (1 5 6 2)
+        );
+    }
+
+    back
+    {
+        type wall;
+        faces
+        (
+            (3 2 6 7)
+        );
+    }
+
+    front
+    {
+	type wall;
+        faces
+        (
+            (0 1 5 4)
+        );
+
+    }
+
+    bottom
+    {
+        type wall;
+        faces
+        (
+            (0 3 2 1)
+        );
+    }
+
+    top
+    {
+        type patch;
+        faces
+        (
+            (4 5 6 7)
+        );
+    }
+);
+
+mergePatchPairs
+(
+);
+
+// ************************************************************************* //

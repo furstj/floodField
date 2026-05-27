@@ -1,0 +1,137 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2011-2024 OpenFOAM Foundation
+     \\/     M anipulation  |
+-------------------------------------------------------------------------------
+License
+    This file is part of OpenFOAM.
+
+    OpenFOAM is free software: you can redistribute it and/or modify it
+    under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    OpenFOAM is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+    for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
+
+Title
+    snappyHexMeshDict for floodField tutorial
+
+Description
+    Creates a boat hull (empty box) in the domain using STL geometry.
+    Boat dimensions: x: 2-4, y: 2-4, z: 0-3 m
+
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+
+// Which faces of the stl surface to snap to
+castellatedMesh true;
+snap            true;
+addLayers       false;
+
+// External wall geometry
+geometry
+{
+    // Boat hull - empty box (no top)
+    boat.stl
+    {
+        type triSurfaceMesh;
+        name boat;
+    }
+
+};
+
+// Castellated mesh controls
+castellatedMeshControls
+{
+    // Refinement levels
+    maxLocalCells 100000;
+    maxGlobalCells 2000000;
+    minRefinementCells 10;
+    maxLoadUnbalance 0.10;
+    nCellsBetweenLevels 3;
+
+    features
+    (
+    );
+
+    // Surface based refinement
+    refinementSurfaces
+    {
+        boat
+        {
+            level (1 1);
+            patchInfo
+            {
+                type wall;
+            }
+        }
+    }
+
+    resolveFeatureAngle 30;
+
+    // Region-based refinement
+    refinementRegions
+    {
+    }
+
+    locationInMesh (0 0 1);
+    allowFreeStandingZoneFaces true;
+}
+
+// Snap controls
+snapControls
+{
+    nSmoothPatch 3;
+    tolerance 2.0;
+    nSolveIter 5;
+    nRelaxIter 5;
+    nFeatureSnapIter 5;
+    implicitFeatureSnap true;
+    explicitFeatureSnap false;
+    multiRegionFeatureSnap false;
+}
+
+// Layer addition controls
+addLayersControls
+{
+}
+
+// Mesh quality controls
+meshQualityControls
+{
+    maxNonOrtho 65;
+    maxBoundarySkewness 20;
+    maxInternalSkewness 4;
+    maxConcave 80;
+    minTetQuality 1e-30;
+    minVol 1e-13;
+    minArea 1e-13;
+    minTwist 0.02;
+    minDeterminant 0.001;
+    minFaceWeight 0.02;
+    minVolRatio 0.01;
+    minTriangleTwist -1;
+    nSmoothScale 4;
+    errorReduction 0.75;
+}
+
+// Advanced
+debug 0;
+mergeTolerance 1E-6;
+
+// ************************************************************************* //
