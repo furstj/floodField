@@ -56,6 +56,7 @@ tutorials/floodField/
 To compile the utility, run:
 
 ```bash
+git clone https://github.com/furstj/floodField.git
 cd floodField
 wmake
 ```
