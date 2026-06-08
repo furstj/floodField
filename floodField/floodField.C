@@ -113,6 +113,8 @@ int main(int argc, char *argv[])
     // Find cells containing seed points and add to queue
     DynamicList<label> queue(100);
 
+    Info<< "Flooding alpha.water ..." << endl;
+
     forAll(seedPoints, i)
     {
         const point& pt = seedPoints[i];
@@ -182,6 +184,14 @@ int main(int argc, char *argv[])
         }
     }
 
+    // Flood boundary conditions (if any) - set alpha to 1 for boundaries if the adjacent cell is water
+    // Loop over all boundary patches of alpha and copy values from adjacent cells
+    forAll(alpha.boundaryField(), patchi)
+    {
+        fvPatchField<scalar>& patchField = alpha.boundaryFieldRef()[patchi];
+        patchField == patchField.patchInternalField();
+    }
+    
     Info<< "Flood-fill complete. Filled " << filledCells << " cells with water."
         << endl;
 
