@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
             "alpha.water",
             runTime.timeName(),
             mesh,
-            IOobject::NO_READ,
+            IOobject::READ_IF_PRESENT,
             IOobject::AUTO_WRITE
         ),
         mesh,
